@@ -1,7 +1,9 @@
 import express, {Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { RequestValidationError } from '../errors/request-validation-error';
-import { DatabaseConnectionError } from '../errors/database-connection-error';
+import { User } from '../models/user';
+import { BadRequestError } from '../errors/bad-request-error';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
@@ -17,18 +19,43 @@ router.post(
             .isLength({min: 4, max: 20})
             .withMessage('Password must be between 4 and 20 characters'),
     ],
-    (req: Request, res: Response) => {
+    async (req: Request, res: Response) => {
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
             throw new RequestValidationError(errors.array());
         }
-    
-        console.log('Creating a user...')
+        
+        const { email, password} = req.body;
 
-        throw new DatabaseConnectionError();
+        const existingUser = await User.findOne({email});
+        
+        if (existingUser) {
+            throw new BadRequestError('Email in use');
+        }
 
-        res.send({});
+        const user = User.build({
+            email,
+            password,
+        });
+
+        await user.save();
+
+        // Generate JWT
+        const userJwt = jwt.sign(
+            {
+                id: user.id,
+                email: user.email
+            },
+//created in k8s using kubectl create secret generic jwt-secret --from-literal=JWT_KEY=asdf , for dev purposes
+            process.env.JWT_KEY!
+        );
+
+        req.session = {
+            jwt: userJwt
+        };
+
+        res.status(201).send(user);
     }
 );
 

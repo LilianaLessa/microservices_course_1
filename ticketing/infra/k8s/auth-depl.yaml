@@ -15,6 +15,12 @@ spec:
       containers:
         - name: auth
           image: lilianalessa1/microservices_course_ticketing_auth
+          env: 
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
 ---
 #Default type: ClusterIP
 apiVersion: v1
