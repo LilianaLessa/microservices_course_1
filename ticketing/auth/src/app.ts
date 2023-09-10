@@ -7,8 +7,7 @@ import { currentUserRouter } from './routes/current-user';
 import { signInRouter } from './routes/signin';
 import { signOutRouter } from './routes/signout';
 import { signUpRouter } from './routes/signup';
-import { erroHandler } from './middlewares/error-handler';
-import { NotFoundError } from './errors/not-found-error';
+import { NotFoundError, erroHandler } from '@liliana-lessa-microservices-1/common';
 
 const app = express();
 app.set('trust proxy', true);
