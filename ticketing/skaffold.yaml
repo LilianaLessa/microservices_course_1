@@ -15,3 +15,12 @@ build:
         manual:
           - src: src/**/*.ts
             dest: .
+    - image: lilianalessa1/microservices_course_ticketing_client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
+            
