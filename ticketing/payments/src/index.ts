@@ -2,10 +2,8 @@ import mongoose from 'mongoose';
 
 import { app } from './app';
 import { natsWrapper } from './nats-wrapper';
-import { TicketCreatedListener } from './events/listeners/ticket-created-listener';
-import { TicketUpdatedListener } from './events/listeners/ticket-updated-listener';
-import { ExpirationCompleteListener } from './events/listeners/expiration-complete-listener';
-
+import { OrderCreatedListener } from './events/listeners/order-created-listener';
+import { OrderCancelledListener } from './events/listeners/order-cancelled-listener';
 
 const startNats = async () => {
     if (!process.env.NATS_CLUSTER_ID) {
@@ -32,10 +30,8 @@ const startNats = async () => {
     process.on('SIGINT', () => natsWrapper.stan.close());
     process.on('SIGTERM', () => natsWrapper.stan.close());
 
-    //event listeners
-    new TicketCreatedListener(natsWrapper.stan).listen();
-    new TicketUpdatedListener(natsWrapper.stan).listen();
-    new ExpirationCompleteListener(natsWrapper.stan).listen();
+    new OrderCreatedListener(natsWrapper.stan).listen();
+    new OrderCancelledListener(natsWrapper.stan).listen();
 }
 
 const start = async() => {

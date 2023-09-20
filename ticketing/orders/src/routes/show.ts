@@ -1,4 +1,4 @@
-import { NotAuthorizedError, NotFoundError, requireAuth } from '@liliana-lessa-microservices-1/common';
+import { NotFoundError, requireAuth } from '@liliana-lessa-microservices-1/common';
 import express, {Request, Response } from 'express';
 import { Order } from '../models/order';
 

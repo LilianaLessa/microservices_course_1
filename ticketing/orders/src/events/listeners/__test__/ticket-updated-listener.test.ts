@@ -1,8 +1,8 @@
 import { Message } from 'node-nats-streaming';
 import mongoose from 'mongoose';
 import { TicketUpdatedEvent } from '@liliana-lessa-microservices-1/common';
-import { natsWrapper } from '../../nats-wrapper';
-import { Ticket } from '../../models/ticket';
+import { natsWrapper } from '../../../nats-wrapper';
+import { Ticket } from '../../../models/ticket';
 import { TicketUpdatedListener } from '../ticket-updated-listener';
 
 const setup = async () => {

@@ -9,7 +9,7 @@ import { OrderCreatedPublisher } from '../events/publisher/order-created-publish
 
 const router = express.Router();
 
-const EPIRATION_WINDOW_SECONDS = 15 * 60;
+const EPIRATION_WINDOW_SECONDS = 1 * 60;
 
 router.post(
     '/api/orders',

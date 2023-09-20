@@ -39,4 +39,20 @@ build:
         manual:
           - src: src/**/*.ts
             dest: .
+    - image: lilianalessa1/microservices_course_ticketing_expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
+    - image: lilianalessa1/microservices_course_ticketing_payments
+      context: payments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
             

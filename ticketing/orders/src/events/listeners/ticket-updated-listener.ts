@@ -1,7 +1,7 @@
 import { Listener, Subjects, TicketUpdatedEvent } from "@liliana-lessa-microservices-1/common";
 import { queueGroupName } from "./queue-group-name";
 import { Message } from "node-nats-streaming";
-import { Ticket } from "../models/ticket";
+import { Ticket } from "../../models/ticket";
 
 export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
     readonly subject = Subjects.TicketUpdated;
