@@ -1,7 +1,9 @@
 name:  tests ticketing/tickets
 
 on:
-  pull_request
+  pull_request:
+    paths:
+      - 'ticketing/tickets/**'
 
 defaults:
   run:

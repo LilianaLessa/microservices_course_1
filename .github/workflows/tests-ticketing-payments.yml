@@ -1,7 +1,9 @@
 name:  tests ticketing/payments
 
 on:
-  pull_request
+  pull_request:
+    paths:
+      - 'ticketing/payments/**'
 
 defaults:
   run:
