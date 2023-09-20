@@ -2,6 +2,8 @@ import { requireAuth, validateRequest } from '@liliana-lessa-microservices-1/com
 import express, {Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Ticket } from '../models/ticket';
+import { TicketCreatedPublisher } from '../events/publisher/ticket-created-publisher';
+import { natsWrappper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -29,6 +31,13 @@ router.post(
         )
 
         await ticket.save();
+
+        await new TicketCreatedPublisher(natsWrappper.stan).publish({
+            id: ticket.id,
+            title: ticket.title,
+            price: ticket.price,
+            userId:  ticket.userId
+        });
 
         res.status(201).send(ticket);
     }
