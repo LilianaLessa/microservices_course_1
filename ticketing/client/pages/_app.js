@@ -6,7 +6,10 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
     return (
         <div>
             <Header currentUser={currentUser}/>
-            <Component {...pageProps}/>
+            <div className='container'>
+                <Component currentUser={currentUser} {...pageProps}/>
+            </div>
+            
         </div>
     );
 };
@@ -16,13 +19,12 @@ AppComponent.getInitialProps = async (appContext) => {
     const { data } = await client.get('/api/users/currentuser');
 
     const propsGetter = appContext.Component.getInitialProps;
-    const pageProps = propsGetter ? await propsGetter(appContext.ctx) : {};
+    const pageProps = propsGetter ? await propsGetter(appContext.ctx, client, data.currentUser) : {};
 
     return {
         pageProps,
         ...data
     }
 };
-
 
 export default AppComponent;
