@@ -1,4 +1,4 @@
-name: ticketing tests
+name:  tests ticketing/auth
 
 on:
   pull_request
