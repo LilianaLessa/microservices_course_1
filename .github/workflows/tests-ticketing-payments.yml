@@ -1,0 +1,17 @@
+name:  tests ticketing/payments
+
+on:
+  pull_request:
+    paths:
+      - 'ticketing/payments/**'
+
+defaults:
+  run:
+    working-directory: ./ticketing
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd payments && npm install && npm run test:ci
