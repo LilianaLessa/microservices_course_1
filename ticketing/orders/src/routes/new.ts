@@ -4,6 +4,8 @@ import express, {Request, Response } from 'express';
 import mongoose from 'mongoose';
 import { Ticket } from '../models/ticket';
 import { Order, OrderStatus } from '../models/order';
+import { natsWrappper } from '../nats-wrapper';
+import { OrderCreatedPublisher } from '../events/publisher/order-created-publisher';
 
 const router = express.Router();
 
@@ -44,7 +46,16 @@ router.post(
 
         await order.save();
 
-        //publish order created event
+        await new OrderCreatedPublisher(natsWrappper.stan).publish({
+            id: order.id,
+            status: order.status,
+            userId: order.userId,
+            expiresAt: order.expiresAt.toISOString(),
+            ticket: {
+                id: order.ticket.id,
+                price: order.ticket.price
+            }
+        });
 
         res.status(201).send(order);
     }
