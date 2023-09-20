@@ -28,12 +28,12 @@ it(
         })
         .expect(201);
 
-        const ticketReponse = await request(app)
+        const ticketResponse = await request(app)
         .get(`/api/tickets/${response.body.id}`)
         .send()
         .expect(200);
 
-        expect(ticketReponse.body.title).toEqual(title);
-        expect(ticketReponse.body.price).toEqual(price);
+        expect(ticketResponse.body.title).toEqual(title);
+        expect(ticketResponse.body.price).toEqual(price);
     }
 );
