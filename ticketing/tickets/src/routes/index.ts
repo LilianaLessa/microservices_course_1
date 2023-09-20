@@ -1,6 +1,5 @@
 import express, {Request, Response } from 'express';
 import { Ticket } from '../models/ticket';
-import { NotFoundError } from '@liliana-lessa-microservices-1/common';
 
 const router = express.Router();
 

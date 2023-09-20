@@ -31,3 +31,12 @@ build:
         manual:
           - src: src/**/*.ts
             dest: .
+    - image: lilianalessa1/microservices_course_ticketing_orders
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
+            
