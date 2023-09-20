@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 
 import { app } from './app';
 import { natsWrapper } from './nats-wrapper';
+import { OrderCreatedListener } from './events/listeners/order-created-listener';
+import { OrderCancelledListener } from './events/listeners/order-cancelled-listener';
 
 
 const startNats = async () => {
@@ -28,6 +30,9 @@ const startNats = async () => {
     });
     process.on('SIGINT', () => natsWrapper.stan.close());
     process.on('SIGTERM', () => natsWrapper.stan.close());
+
+    new OrderCreatedListener(natsWrapper.stan).listen();
+    new OrderCancelledListener(natsWrapper.stan).listen();
 }
 
 const start = async() => {

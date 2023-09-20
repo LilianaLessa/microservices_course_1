@@ -1,4 +1,4 @@
-import { NotAuthorizedError, NotFoundError, requireAuth, validateRequest } from '@liliana-lessa-microservices-1/common';
+import { BadRequestError, NotAuthorizedError, NotFoundError, requireAuth, validateRequest } from '@liliana-lessa-microservices-1/common';
 import express, {Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Ticket } from '../models/ticket';
@@ -25,6 +25,10 @@ router.put(
 
         if (!ticket) {
             throw new NotFoundError();
+        }
+
+        if (ticket.orderId) {
+            throw new BadRequestError('Cannot edit a reserved ticket');
         }
 
         if (ticket.userId !== req.currentUser!.id) {
