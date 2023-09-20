@@ -1,0 +1,29 @@
+name: deploy-ticketing-payments
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'ticketing/payments/**'
+
+defaults:
+  run:
+    working-directory: ./ticketing
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd payments && docker build -t lilianalessa1/microservices_course_ticketing_payments .
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker push lilianalessa1/microservices_course_ticketing_payments
+      - uses: digitalocean/action-doctl@v2
+        with: 
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - run: doctl kubernetes cluster kubeconfig save ticketing
+      - run: kubectl rollout restart deployment payments-depl
