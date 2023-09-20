@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 import { app } from './app';
-import { natsWrappper } from './nats-wrapper';
+import { natsWrapper } from './nats-wrapper';
 
 
 const startNats = async () => {
@@ -17,17 +17,17 @@ const startNats = async () => {
         throw new Error('NATS_URL must be defined');
     }
     
-    await natsWrappper.connect(
+    await natsWrapper.connect(
         process.env.NATS_CLUSTER_ID,
         process.env.NATS_CLIENT_ID,
         process.env.NATS_URL
     );
-    natsWrappper.stan.on('close', () => {
+    natsWrapper.stan.on('close', () => {
         console.log('NATS connection closed!');
         process.exit();
     });
-    process.on('SIGINT', () => natsWrappper.stan.close());
-    process.on('SIGTERM', () => natsWrappper.stan.close());
+    process.on('SIGINT', () => natsWrapper.stan.close());
+    process.on('SIGTERM', () => natsWrapper.stan.close());
 }
 
 const start = async() => {

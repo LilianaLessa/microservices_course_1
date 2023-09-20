@@ -2,7 +2,7 @@ import { NotFoundError, requireAuth } from '@liliana-lessa-microservices-1/commo
 import express, {Request, Response } from 'express';
 import { Order, OrderStatus } from '../models/order';
 import { OrderCancelledPublisher } from '../events/publisher/order-cancelled-publisher';
-import { natsWrappper } from '../nats-wrapper';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -24,8 +24,9 @@ router.delete(
 
         await order.save();
 
-        await new OrderCancelledPublisher(natsWrappper.stan).publish({
+        await new OrderCancelledPublisher(natsWrapper.stan).publish({
             id: order.id,
+            version: order.version,
             ticket: {
                 id: order.ticket.id
             }

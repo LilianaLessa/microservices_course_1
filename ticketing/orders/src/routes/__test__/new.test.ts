@@ -3,7 +3,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Order, OrderStatus } from '../../models/order';
 import { Ticket } from '../../models/ticket';
-import { natsWrappper } from '../../nats-wrapper';
+import { natsWrapper } from '../../nats-wrapper';
 
 it('returns an error if the ticket does not exist', async () => {
   const ticketId = new mongoose.Types.ObjectId();
@@ -19,6 +19,7 @@ it('returns an error if the ticket is already reserved', async () => {
   const ticket = Ticket.build({
     title: 'concert',
     price: 20,
+    id: new mongoose.Types.ObjectId().toString()
   });
   await ticket.save();
   const order = Order.build({
@@ -40,6 +41,7 @@ it('reserves a ticket', async () => {
   const ticket = Ticket.build({
     title: 'concert',
     price: 20,
+    id: new mongoose.Types.ObjectId().toString()
   });
   await ticket.save();
 
@@ -57,6 +59,7 @@ it(
     const ticket = Ticket.build({
       title: 'concert',
       price: 20,
+      id: new mongoose.Types.ObjectId().toString()
     });
     await ticket.save();
   
@@ -67,6 +70,6 @@ it(
       .expect(201)
       ;
 
-      expect(natsWrappper.stan.publish).toHaveBeenCalled();
+      expect(natsWrapper.stan.publish).toHaveBeenCalled();
   }
 );

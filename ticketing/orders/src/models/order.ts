@@ -17,6 +17,7 @@ interface OrderDoc extends mongoose.Document {
     status: OrderStatus;
     expiresAt: Date;
     ticket: TicketDoc;
+    version: number;
 }
 
 // An interface that describes the properties that a order has
@@ -48,7 +49,6 @@ const orderSchema = new mongoose.Schema(
         toJSON: {
             transform (doc, ret) {
                 ret.id = ret._id;
-                delete ret.__v;
                 delete ret._id;
             }
          }

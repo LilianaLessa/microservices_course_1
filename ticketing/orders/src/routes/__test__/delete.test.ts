@@ -2,13 +2,15 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket';
 import { Order, OrderStatus } from '../../models/order';
-import { natsWrappper } from '../../nats-wrapper';
+import { natsWrapper } from '../../nats-wrapper';
+import mongoose from 'mongoose';
 
 it('marks an order as cancelled', async () => {
   // create a ticket with Ticket Model
   const ticket = Ticket.build({
     title: 'concert',
     price: 20,
+    id: new mongoose.Types.ObjectId().toString()
   });
   await ticket.save();
 
@@ -40,6 +42,7 @@ it(
     const ticket = Ticket.build({
       title: 'concert',
       price: 20,
+      id: new mongoose.Types.ObjectId().toString()
     });
     await ticket.save();
 
@@ -63,6 +66,6 @@ it(
 
     expect(updatedOrder!.status).toEqual(OrderStatus.Cancelled);
     
-    expect(natsWrappper.stan.publish).toHaveBeenCalled();
+    expect(natsWrapper.stan.publish).toHaveBeenCalled();
   }
 );

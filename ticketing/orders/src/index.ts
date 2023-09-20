@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 
 import { app } from './app';
-import { natsWrappper } from './nats-wrapper';
+import { natsWrapper } from './nats-wrapper';
+import { TicketCreatedListener } from './listeners/ticket-created-listener';
+import { TicketUpdatedListener } from './listeners/ticket-updated-listener';
 
 
 const startNats = async () => {
@@ -17,17 +19,21 @@ const startNats = async () => {
         throw new Error('NATS_URL must be defined');
     }
     
-    await natsWrappper.connect(
+    await natsWrapper.connect(
         process.env.NATS_CLUSTER_ID,
         process.env.NATS_CLIENT_ID,
         process.env.NATS_URL
     );
-    natsWrappper.stan.on('close', () => {
+    natsWrapper.stan.on('close', () => {
         console.log('NATS connection closed!');
         process.exit();
     });
-    process.on('SIGINT', () => natsWrappper.stan.close());
-    process.on('SIGTERM', () => natsWrappper.stan.close());
+    process.on('SIGINT', () => natsWrapper.stan.close());
+    process.on('SIGTERM', () => natsWrapper.stan.close());
+
+    //event listeners
+    new TicketCreatedListener(natsWrapper.stan).listen();
+    new TicketUpdatedListener(natsWrapper.stan).listen();
 }
 
 const start = async() => {

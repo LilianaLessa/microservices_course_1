@@ -2,7 +2,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket';
 import mongoose from 'mongoose';
-import { natsWrappper } from '../../nats-wrapper';
+import { natsWrapper } from '../../nats-wrapper';
 
 it(
     'returns 404 if provided id does not exist',
@@ -176,6 +176,6 @@ it(
         })
         .expect(200);
 
-        expect(natsWrappper.stan.publish).toHaveBeenCalledTimes(2);
+        expect(natsWrapper.stan.publish).toHaveBeenCalledTimes(2);
     }
 );
